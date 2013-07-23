@@ -2,9 +2,11 @@ package net.cassiolandim.alarmefalante;
 
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 
 public class AlarmRingingService extends Service {
@@ -13,6 +15,8 @@ public class AlarmRingingService extends Service {
 
 	private final IBinder binder = new LocalBinder();
 	private boolean threadRunning = true;
+	private PowerManager powerManager;
+	private PowerManager.WakeLock wakeLock;
 
 	public class LocalBinder extends Binder {
 		public AlarmRingingService getService() {
@@ -27,6 +31,10 @@ public class AlarmRingingService extends Service {
 
 	@Override
 	public void onCreate() {
+		powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+		wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "AlarmRingingService");
+		wakeLock.acquire();
+
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this).setSmallIcon(R.drawable.ic_launcher).setContentTitle("Alarme tocando!")
 				.setContentText("Acorda Renataaa!");
 
@@ -57,6 +65,7 @@ public class AlarmRingingService extends Service {
 	@Override
 	public void onDestroy() {
 		threadRunning = false;
+		wakeLock.release();
 		super.onDestroy();
 	}
 }

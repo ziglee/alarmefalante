@@ -16,6 +16,7 @@
         android:layout_height="wrap_content" />
 
     <ToggleButton
+        android:layout_marginTop="20dp"
         android:id="@+id/toggle_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,5 +27,6 @@
         android:id="@+id/ringnow_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ring now"/>
+        android:text="Ring now"
+        android:visibility="gone"/>
 </LinearLayout>
