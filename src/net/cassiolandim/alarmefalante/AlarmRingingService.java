@@ -34,7 +34,7 @@ public class AlarmRingingService extends Service {
 		wakeLock.acquire();
 
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this).setSmallIcon(R.drawable.ic_launcher).setContentTitle("Alarme tocando!")
-				.setContentText("Acorda Renataaa!");
+				.setContentText("Acordaaaa!");
 
 		Intent notificationIntent = new Intent(this, AlarmRingingActivity.class);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
