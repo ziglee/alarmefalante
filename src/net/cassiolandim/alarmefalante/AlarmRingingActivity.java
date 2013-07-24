@@ -18,6 +18,8 @@ import android.widget.Button;
 
 public class AlarmRingingActivity extends Activity {
 
+	private static final int SNOOZE_INTERVAL = 5 * 1000 * 60;
+	
 	private AlarmRingingService alarmRingingService;
 	private boolean bound = false;
 	private AlarmManager alarmManager;
@@ -53,7 +55,7 @@ public class AlarmRingingActivity extends Activity {
 				
 				Intent i = new Intent(AlarmRingingActivity.this, AlarmRingingService.class);
 				PendingIntent pi = PendingIntent.getService(AlarmRingingActivity.this, 555, i, PendingIntent.FLAG_UPDATE_CURRENT);
-				alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 20000, pi);
+				alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + SNOOZE_INTERVAL, pi);
 				finish();
 			}
 		});

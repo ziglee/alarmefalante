@@ -45,6 +45,7 @@ public class TimeTalkerReceiver extends BroadcastReceiver {
     	Date now = new Date();
 		hours = HOURS_DATE_FORMATTER.format(now);
 		minutes = MINUTES_DATE_FORMATTER.format(now);
+		
 		playHours(context);
     }
     

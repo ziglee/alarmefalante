@@ -11,8 +11,6 @@ import android.support.v4.app.NotificationCompat;
 
 public class AlarmRingingService extends Service {
 
-	private static final int SNOOZE_INTERVAL_MINUTES = 5;
-
 	private final IBinder binder = new LocalBinder();
 	private boolean threadRunning = true;
 	private PowerManager powerManager;
@@ -49,7 +47,7 @@ public class AlarmRingingService extends Service {
 				while (threadRunning) {
 					sendBroadcast(new Intent(AlarmRingingService.this, TimeTalkerReceiver.class));
 					try {
-						Thread.sleep(SNOOZE_INTERVAL_MINUTES * 1000 * 60);
+						Thread.sleep(7000);
 					} catch (InterruptedException e) {
 					}
 				}
