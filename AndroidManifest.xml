@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.cassiolandim.alarmefalante"
-    android:versionCode="2"
-    android:versionName="1.1" >
+    android:versionCode="5"
+    android:versionName="1.3" >
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
 
     <application
         android:name=".MyApplication"
@@ -37,8 +38,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".TimeTalkerReceiver" />
-
+        <service android:name=".TimeTalkerIntentService" />
         <service android:name=".AlarmSetterService" />
         <service android:name=".AlarmRingingService" />
     </application>

@@ -8,6 +8,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
@@ -23,7 +24,6 @@ public class AlarmRingingActivity extends Activity {
 	private AlarmRingingService alarmRingingService;
 	private boolean bound = false;
 	private AlarmManager alarmManager;
-	
 	private Button offButton;
 	private Button snoozeButton;
 
@@ -34,11 +34,11 @@ public class AlarmRingingActivity extends Activity {
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);  
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON); 
-		
 		setContentView(R.layout.activity_alarm_ringing);
 
-		alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+		setVolumeControlStream(AudioManager.STREAM_ALARM);
 		
+		alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		offButton = (Button) findViewById(R.id.off_button);
 		snoozeButton = (Button) findViewById(R.id.snooze_button);
 
@@ -56,7 +56,6 @@ public class AlarmRingingActivity extends Activity {
 			public void onClick(View v) {
 				if (bound)
 					alarmRingingService.stopSelf();
-				
 				Intent i = new Intent(AlarmRingingActivity.this, AlarmRingingService.class);
 				PendingIntent pi = PendingIntent.getService(AlarmRingingActivity.this, 555, i, PendingIntent.FLAG_UPDATE_CURRENT);
 				alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + SNOOZE_INTERVAL, pi);
@@ -68,7 +67,6 @@ public class AlarmRingingActivity extends Activity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		// Bind to LocalService
 		Intent intent = new Intent(this, AlarmRingingService.class);
 		bindService(intent, connection, Context.BIND_AUTO_CREATE);
 	}

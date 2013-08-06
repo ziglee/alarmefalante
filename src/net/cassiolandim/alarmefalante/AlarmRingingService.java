@@ -45,7 +45,7 @@ public class AlarmRingingService extends Service {
 			@Override
 			public void run() {
 				while (threadRunning) {
-					sendBroadcast(new Intent(AlarmRingingService.this, TimeTalkerReceiver.class));
+					startService(new Intent(AlarmRingingService.this, TimeTalkerIntentService.class));
 					try {
 						Thread.sleep(7000);
 					} catch (InterruptedException e) {

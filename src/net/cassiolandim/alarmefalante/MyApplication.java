@@ -22,6 +22,14 @@ public class MyApplication extends Application {
     	sp.edit().putBoolean("enabled", enabled).commit();
     }
     
+    public int getVolume() {
+    	return sp.getInt("volume", 100);
+    }
+    
+    public void setVolume(int volume) {
+    	sp.edit().putInt("volume", volume).commit();
+    }
+    
     public int getHour() {
     	return sp.getInt("hour", 7);
     }
@@ -37,4 +45,12 @@ public class MyApplication extends Application {
     public void setMinute(int minute) {
     	sp.edit().putInt("minute", minute).commit();
     }
+
+	public boolean getVibrationEnabled() {
+		return sp.getBoolean("vibration", false);
+	}
+	
+	public void setVibrationEnabled(boolean enabled) {
+    	sp.edit().putBoolean("vibration", enabled).commit();
+	}
 }

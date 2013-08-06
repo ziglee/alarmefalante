@@ -4,74 +4,92 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TimePicker;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class MainActivity extends Activity {
 
+	private MyApplication app;
 	private TimePicker timePicker;
 	private ToggleButton toggleButton;
+	private CheckBox vibrationCheck;
+	private SeekBar volumeSeeker;
 
-	private Button ringnowButton;
-	private Button saveButton;
-	private Button cancelButton;
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		final MyApplication app = (MyApplication) getApplication();
-		
-		timePicker = (TimePicker) findViewById(R.id.time_picker);
-		toggleButton = (ToggleButton) findViewById(R.id.toggle_button);
-		ringnowButton = (Button) findViewById(R.id.ringnow_button);
-		saveButton = (Button) findViewById(R.id.save_button);
-		cancelButton = (Button) findViewById(R.id.cancel_button);
+		this.app = (MyApplication) getApplication();
+		this.timePicker = (TimePicker) findViewById(R.id.time_picker);
+		this.toggleButton = (ToggleButton) findViewById(R.id.toggle_button);
+		this.volumeSeeker = (SeekBar) findViewById(R.id.volume_seek);
+		this.vibrationCheck = (CheckBox) findViewById(R.id.vibration_check);
 
+		volumeSeeker.setMax(100);
+		volumeSeeker.setProgress(app.getVolume());
 		timePicker.setIs24HourView(true);
 		timePicker.setCurrentHour(app.getHour());
 		timePicker.setCurrentMinute(app.getMinute());
 		toggleButton.setChecked(app.getEnabled());
-		
-		saveButton.setOnClickListener(new OnClickListener() {
+		vibrationCheck.setChecked(app.getVibrationEnabled());
+
+		vibrationCheck.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
-			public void onClick(View v) {
-				app.setHour(timePicker.getCurrentHour());
-				app.setMinute(timePicker.getCurrentMinute());
-				app.setEnabled(toggleButton.isChecked());
-				
-				Intent service = new Intent(MainActivity.this, AlarmSetterService.class);
-				service.setAction(toggleButton.isChecked() ? AlarmSetterService.CREATE : AlarmSetterService.CANCEL);
-				startService(service);
-				
-				if (toggleButton.isChecked())
-					Toast.makeText(MainActivity.this, "Alarme programado com sucesso", Toast.LENGTH_SHORT).show();
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				app.setVibrationEnabled(isChecked);
 			}
 		});
 		
-		cancelButton.setOnClickListener(new OnClickListener() {
+		toggleButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
-			public void onClick(View v) {
-				finish();
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				saveSettings();
 			}
 		});
-		
-		ringnowButton.setOnClickListener(new OnClickListener() {
+
+		volumeSeeker.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			@Override
-			public void onClick(View v) {
-				startService(new Intent(MainActivity.this, AlarmRingingService.class));
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				app.setVolume(seekBar.getProgress());
+				startService(new Intent(MainActivity.this, TimeTalkerIntentService.class));
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
+
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 			}
 		});
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+		// getMenuInflater().inflate(R.menu.main, menu);
+		return false;
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		saveSettings();
+	}
+
+	private void saveSettings() {
+		app.setHour(timePicker.getCurrentHour());
+		app.setMinute(timePicker.getCurrentMinute());
+		app.setEnabled(toggleButton.isChecked());
+		app.setVibrationEnabled(vibrationCheck.isChecked());
+
+		Intent service = new Intent(MainActivity.this, AlarmSetterService.class);
+		service.setAction(toggleButton.isChecked() ? AlarmSetterService.CREATE : AlarmSetterService.CANCEL);
+		startService(service);
 	}
 }
