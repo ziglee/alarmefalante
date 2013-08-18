@@ -10,7 +10,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".AlarmRingingActivity" >
 
-    <!-- TODO colocar o relogio aqui -->
+    <TextView
+        android:id="@+id/clock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="00:00"
+        android:textSize="46dp"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/off_button"
@@ -28,6 +35,6 @@
         android:layout_margin="20dp"
         android:layout_weight="1"
         android:contentDescription="Soneca mais 5 minutos"
-        android:text="Soneca" />
+        android:text="Soneca\n(+5 minutos)" />
 
 </LinearLayout>

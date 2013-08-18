@@ -1,9 +1,12 @@
 package net.cassiolandim.alarmefalante;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import net.cassiolandim.alarmefalante.AlarmRingingService.LocalBinder;
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -16,17 +19,22 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class AlarmRingingActivity extends Activity {
 
-	private static final int SNOOZE_INTERVAL = 5 * 1000 * 60;
+	public static final String EXTRA_ID = "id";
+	
+	private static final SimpleDateFormat SDF = new SimpleDateFormat("HH:mm");
 	
 	private AlarmRingingService alarmRingingService;
 	private boolean bound = false;
-	private AlarmManager alarmManager;
+	private TextView clock;
 	private Button offButton;
 	private Button snoozeButton;
-
+	private Timer timer;
+	private long startedAt = 0;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,9 +46,10 @@ public class AlarmRingingActivity extends Activity {
 
 		setVolumeControlStream(AudioManager.STREAM_ALARM);
 		
-		alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-		offButton = (Button) findViewById(R.id.off_button);
-		snoozeButton = (Button) findViewById(R.id.snooze_button);
+		this.startedAt = SystemClock.elapsedRealtime();
+		this.clock = (TextView) findViewById(R.id.clock);
+		this.offButton = (Button) findViewById(R.id.off_button);
+		this.snoozeButton = (Button) findViewById(R.id.snooze_button);
 
 		offButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -54,14 +63,14 @@ public class AlarmRingingActivity extends Activity {
 		snoozeButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (bound)
-					alarmRingingService.stopSelf();
-				Intent i = new Intent(AlarmRingingActivity.this, AlarmRingingService.class);
-				PendingIntent pi = PendingIntent.getService(AlarmRingingActivity.this, 555, i, PendingIntent.FLAG_UPDATE_CURRENT);
-				alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + SNOOZE_INTERVAL, pi);
+				if (bound) {
+					alarmRingingService.scheduleSnooze();
+				}
 				finish();
 			}
 		});
+		
+		scheduleTimer();
 	}
 
 	@Override
@@ -79,6 +88,32 @@ public class AlarmRingingActivity extends Activity {
 			bound = false;
 		}
 	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (timer != null)
+			timer.cancel();
+	}
+	
+	private void scheduleTimer() {
+		timer = new Timer();
+		TimerTask timerTask = new TimerTask() {
+			@Override
+			public void run() {
+				clock.post(new Runnable() {
+	                public void run() {
+	                	clock.setText(SDF.format(new Date()));
+	                };
+				});
+				long beenPlayingForMilliseconds = SystemClock.elapsedRealtime() - startedAt;
+				if (beenPlayingForMilliseconds > AlarmRingingService.RING_DURATION) {
+					finish();
+				}
+			}
+		};
+		timer.schedule(timerTask, 1000, 1000);
+	}
 
 	private ServiceConnection connection = new ServiceConnection() {
 
@@ -92,6 +127,7 @@ public class AlarmRingingActivity extends Activity {
 		@Override
 		public void onServiceDisconnected(ComponentName arg0) {
 			bound = false;
+			finish();
 		}
 	};
 }

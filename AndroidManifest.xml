@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.cassiolandim.alarmefalante"
-    android:versionCode="5"
-    android:versionName="1.3" >
+    android:versionCode="6"
+    android:versionName="1.4" >
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <application
         android:name=".MyApplication"
@@ -20,7 +20,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="net.cassiolandim.alarmefalante.MainActivity"
+            android:name="net.cassiolandim.alarmefalante.MainListActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -30,17 +30,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AlarmRingingActivity"
+            android:name="net.cassiolandim.alarmefalante.AlarmRingingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="net.cassiolandim.alarmefalante.DetailsActivity"
             android:screenOrientation="portrait" />
 
-        <receiver android:name=".ReconfigureAlarmOnBootReceiver" >
+        <receiver android:name="net.cassiolandim.alarmefalante.ReconfigureAlarmOnBootReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <service android:name=".TimeTalkerIntentService" />
-        <service android:name=".AlarmSetterService" />
-        <service android:name=".AlarmRingingService" />
+
+        <service android:name="net.cassiolandim.alarmefalante.TimeTalkerIntentService" />
+        <service android:name="net.cassiolandim.alarmefalante.AlarmSetterService" />
+        <service android:name="net.cassiolandim.alarmefalante.AlarmRingingService" />
     </application>
 
 </manifest>

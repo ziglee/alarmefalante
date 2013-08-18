@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.Vibrator;
@@ -23,8 +24,10 @@ public class TimeTalkerIntentService extends Service {
 	private static final DateFormat HOURS_DATE_FORMATTER = new SimpleDateFormat("HH");
 	private static final DateFormat MINUTES_DATE_FORMATTER = new SimpleDateFormat("mm");
 	private static final long[] VIBRATION = { 0, 400, 400, 400, 400, 400, 400, 400 };
+	
+	public static final String EXTRA_VOLUME = "volume";
+	public static final String EXTRA_VIBRATION = "vibration";
 
-	private MyApplication app;
 	private AudioManager audioManager;
 	private MediaPlayer mp;
 	private Vibrator vibrator;
@@ -32,11 +35,12 @@ public class TimeTalkerIntentService extends Service {
 	private OnCompletionListener mpOnCompletionListener;
 	private int oldVolume = 0;
 	private int maxVolume = 0;
+	private boolean vibrationEnabled;
+	private int volume = 0;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		this.app = (MyApplication) getApplication();
 		this.audioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 		this.vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
 		this.maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
@@ -62,6 +66,10 @@ public class TimeTalkerIntentService extends Service {
 		if (mp != null && mp.isPlaying())
 			mp.stop();
 
+		Bundle extras = intent.getExtras();
+		this.volume = extras.getInt(EXTRA_VOLUME);
+		this.vibrationEnabled = extras.getBoolean(EXTRA_VIBRATION);
+		
 		this.queue = new LinkedList<Integer>();
 
 		Date now = new Date();
@@ -78,7 +86,7 @@ public class TimeTalkerIntentService extends Service {
 		if (!minutes.equalsIgnoreCase("00"))
 			queue.add(getResources().getIdentifier("minutos_" + minutes, "raw", getPackageName()));
 
-		if (app.getVibrationEnabled())
+		if (vibrationEnabled)
 			vibrator.vibrate(VIBRATION, -1);
 
 		playNextAudio();
@@ -87,7 +95,7 @@ public class TimeTalkerIntentService extends Service {
 	}
 
 	private void playNextAudio() {
-		float volume = (float) app.getVolume() / 100;
+		float volume = (float) this.volume / 100;
 
 		oldVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 		audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int) (volume * maxVolume), AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
