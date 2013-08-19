@@ -31,6 +31,11 @@ public class AlarmSetCursorAdapter extends CursorAdapter {
 	}
 	
 	@Override
+	protected void onContentChanged() {
+		changeCursor(db.query());
+	}
+	
+	@Override
 	public void bindView(View arg0, Context arg1, Cursor arg2) {
 	}
 
@@ -68,8 +73,13 @@ public class AlarmSetCursorAdapter extends CursorAdapter {
 		TextView time = (TextView) view.findViewById(R.id.time);
 		time.setText(nf.format(alarmSet.hour) + ":" + nf.format(alarmSet.minute));
 		
-		TextView weekdays = (TextView) view.findViewById(R.id.weekdays);
-		weekdays.setText(alarmSet.weekdays);
+		view.findViewById(R.id.domingo).setEnabled(alarmSet.weekdays.contains("1"));
+		view.findViewById(R.id.segunda).setEnabled(alarmSet.weekdays.contains("2"));
+		view.findViewById(R.id.terca).setEnabled(alarmSet.weekdays.contains("3"));
+		view.findViewById(R.id.quarta).setEnabled(alarmSet.weekdays.contains("4"));
+		view.findViewById(R.id.quinta).setEnabled(alarmSet.weekdays.contains("5"));
+		view.findViewById(R.id.sexta).setEnabled(alarmSet.weekdays.contains("6"));
+		view.findViewById(R.id.sabado).setEnabled(alarmSet.weekdays.contains("7"));
 		
 		return view;
 	}

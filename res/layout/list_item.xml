@@ -29,11 +29,74 @@
             android:textSize="30sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/weekdays"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp" />
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/domingo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="D"
+                android:textColor="@color/weekdays_check"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/segunda"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="S"
+                android:textColor="@color/weekdays_check"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/terca"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="T"
+                android:textColor="@color/weekdays_check"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/quarta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="Q"
+                android:textColor="@color/weekdays_check"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/quinta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="Q"
+                android:textColor="@color/weekdays_check"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/sexta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="S"
+                android:textColor="@color/weekdays_check"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/sabado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="S"
+                android:textColor="@color/weekdays_check"
+                android:textSize="20sp" />
+        </LinearLayout>
     </LinearLayout>
 
     <CheckBox

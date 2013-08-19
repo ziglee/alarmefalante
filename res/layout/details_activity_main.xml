@@ -22,7 +22,7 @@
             android:gravity="center"
             android:orientation="vertical" >
 
-            <TimePicker
+            <net.cassiolandim.alarmefalante.CustomTimePicker
                 android:id="@+id/time_picker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

@@ -3,6 +3,8 @@ package net.cassiolandim.alarmefalante;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 public class MainListActivity extends ListActivity {
 
@@ -17,14 +19,21 @@ public class MainListActivity extends ListActivity {
 		this.db = app.getDb();
 		this.adapter = new AlarmSetCursorAdapter(this, db.query(), db);
 		setListAdapter(adapter);
+		
+		findViewById(R.id.add).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(MainListActivity.this, DetailsActivity.class));
+			}
+		});
 	}
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_OK) {
-			adapter.changeCursor(db.query());
-			adapter.notifyDataSetChanged();
+			this.adapter = new AlarmSetCursorAdapter(this, db.query(), db);
+			setListAdapter(adapter);
 		}
 	}
 }
