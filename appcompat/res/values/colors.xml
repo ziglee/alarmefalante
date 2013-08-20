@@ -1,3 +1,7 @@
 <resources>
-    <color name="row_selected">#5AC2E9</color>
+
+    <color name="abc_search_url_text_normal">#7fa87f</color>
+    <color name="abc_search_url_text_selected">@android:color/black</color>
+    <color name="abc_search_url_text_pressed">@android:color/black</color>
+
 </resources>

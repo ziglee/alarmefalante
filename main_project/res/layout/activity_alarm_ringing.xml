@@ -34,7 +34,7 @@
         android:layout_height="0dp"
         android:layout_margin="20dp"
         android:layout_weight="1"
-        android:contentDescription="Soneca mais 5 minutos"
-        android:text="Soneca\n(+5 minutos)" />
+        android:contentDescription="Soneca"
+        android:text="Soneca" />
 
 </LinearLayout>

@@ -18,7 +18,7 @@ import android.support.v4.app.NotificationCompat;
 public class AlarmRingingService extends Service {
 
 	public static final String EXTRA_ID = "id";
-	public static final long RING_DURATION = 20 * 1000; // in milliseconds
+	public static final long RING_DURATION = 120 * 1000; // in milliseconds
 
 	private final IBinder binder = new LocalBinder();
 	private boolean threadRunning = false;

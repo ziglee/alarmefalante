@@ -182,12 +182,13 @@ public class DetailsActivity extends FragmentActivity {
 		@SuppressLint("UseSparseArrays")
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
-			final CharSequence[] choiceList = { "5", "10", "15", "20" };
+			final CharSequence[] choiceList = { "5", "10", "15", "20", "30" };
 			final Map<Integer, Integer> mapPositions = new HashMap<Integer, Integer>();
 			mapPositions.put(5, 0);
 			mapPositions.put(10, 1);
 			mapPositions.put(15, 2);
 			mapPositions.put(20, 3);
+			mapPositions.put(30, 4);
 
 			int selected = mapPositions.get(alarmSet.snoozetime);
 

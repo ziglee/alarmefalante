@@ -1,11 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:alarme="http://schemas.android.com/apk/res-auto" >
 
     <item
         android:id="@+id/menu_remove"
-        alarme:showAsAction="always"
         android:icon="@drawable/ic_discard"
         android:orderInCategory="0"
-        android:title="Remover"/>
+        android:title="Remover"
+        alarme:showAsAction="always"/>
 
 </menu>
