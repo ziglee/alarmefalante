@@ -74,6 +74,12 @@ public final class MyDatabase {
 
 		mDatabase.update(ALARMSET_TABLE, initialValues, whereClause, whereClauseArgs);
 	}
+	
+	public final void remove(Long id) {
+		String whereClause = ALARMSET_ID + " = ?";
+		String[] whereClauseArgs = new String[] { String.valueOf(id) };
+		mDatabase.delete(ALARMSET_TABLE, whereClause, whereClauseArgs);
+	}
 
 	public final static AlarmSet populateModel(Cursor cursor) {
 		AlarmSet tt = new AlarmSet();

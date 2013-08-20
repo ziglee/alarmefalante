@@ -16,30 +16,6 @@ public class MyApplication extends Application {
         this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
         this.db = new MyDatabase(this);
         
-        if (prefs.getBoolean("first_time", true)) {
-        	AlarmSet as = new AlarmSet();
-        	as.enabled = false;
-        	as.vibration = true;
-        	as.hour = 7;
-        	as.minute = 30;
-        	as.snoozetime = 2;
-        	as.name = "Teste";
-        	as.volume = 5;
-        	db.insert(as);
-        	
-        	as = new AlarmSet();
-        	as.enabled = false;
-        	as.vibration = false;
-        	as.hour = 18;
-        	as.minute = 50;
-        	as.snoozetime = 10;
-        	as.name = "Estacionamento";
-        	as.volume = 10;
-        	db.insert(as);
-        	
-        	prefs.edit().putBoolean("first_time", false).commit();
-        }
-        
         AlarmSet alarmSet = getLegacyAlarmSet();
 		if (alarmSet != null)
 			db.insert(alarmSet);

@@ -44,15 +44,6 @@ public class AlarmSetCursorAdapter extends CursorAdapter {
 		final AlarmSet alarmSet = MyDatabase.populateModel(cursor);
 		View view = lf.inflate(R.layout.list_item, null);
 		
-		view.findViewById(R.id.info).setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(context, DetailsActivity.class);
-		        intent.putExtra("id", alarmSet.id);
-				((Activity)context).startActivityForResult(intent, 0);
-			}
-		});
-		
 		CheckBox enabled = (CheckBox) view.findViewById(R.id.checkbox);
 		enabled.setChecked(alarmSet.enabled);
 		enabled.setOnCheckedChangeListener(new OnCheckedChangeListener() {

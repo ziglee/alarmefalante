@@ -2,10 +2,10 @@
     xmlns:alarme="http://schemas.android.com/apk/res-auto" >
 
     <item
-        android:id="@+id/menu_add"
+        android:id="@+id/menu_remove"
         alarme:showAsAction="always"
-        android:icon="@drawable/ic_add"
+        android:icon="@drawable/ic_discard"
         android:orderInCategory="0"
-        android:title="Criar alarme"/>
+        android:title="Remover"/>
 
 </menu>
