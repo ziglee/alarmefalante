@@ -4,16 +4,16 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".DetailsActivity" >
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
         android:scrollbars="none" >
 
         <LinearLayout
@@ -25,31 +25,61 @@
             <net.cassiolandim.alarmefalante.CustomTimePicker
                 android:id="@+id/time_picker"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="Volume" />
+                android:layout_marginBottom="5dp" />
 
-            <SeekBar
-                android:id="@+id/volume_seek"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="1dip"
+                android:layout_marginBottom="5dp"
+                android:background="#DDD" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/volume_muted" />
+
+                <SeekBar
+                    android:id="@+id/volume_seek"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/volume_on" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:layout_marginBottom="5dp"
+                android:background="#DDD" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="5dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal" >
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
-                    android:text="Vibrar" />
+                    android:text="Vibrar"
+                    android:textSize="18dp" />
 
                 <CheckBox
                     android:id="@+id/vibration_check"
@@ -57,16 +87,24 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:layout_marginBottom="5dp"
+                android:background="#DDD" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="Dias da Semana" />
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:text="Dias da Semana"
+                android:textSize="18dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_marginBottom="5dp"
                 android:gravity="center"
                 android:orientation="horizontal" >
 
@@ -120,18 +158,48 @@
                     android:textOn="S" />
             </LinearLayout>
 
-            <TextView
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:text="Nome" />
+                android:layout_height="1dip"
+                android:layout_marginBottom="5dp"
+                android:background="#DDD" />
+
+            <LinearLayout
+                android:id="@+id/snoozetime_picker"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:text="Soneca"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/snoozetime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:text="5 min"
+                    android:textColor="#888"
+                    android:layout_marginRight="5dp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:layout_marginBottom="5dp"
+                android:background="#DDD" />
 
             <EditText
                 android:id="@+id/nameEdit"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 
@@ -143,18 +211,20 @@
         android:padding="5dp" >
 
         <Button
-            android:id="@+id/save"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Salvar" />
-
-        <Button
             android:id="@+id/cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginRight="2.5dp"
             android:layout_weight="1"
             android:text="Cancelar" />
+
+        <Button
+            android:id="@+id/save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2.5dp"
+            android:layout_weight="1"
+            android:text="Salvar" />
     </LinearLayout>
 
 </LinearLayout>

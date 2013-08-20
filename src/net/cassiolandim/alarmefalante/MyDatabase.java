@@ -120,6 +120,9 @@ public final class MyDatabase {
 	}
 
 	public final AlarmSet find(Long id) {
+		if (id == -1)
+			return null;
+		
 		String selection = ALARMSET_ID + " = " + id;
 		Cursor mCursor = mDatabase.query(ALARMSET_TABLE, ALARMSET_ALL_COLUMNS, selection, null, null, null, null);
 
