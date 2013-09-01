@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="flurry_key">YZX73346NC37RYCYB2X6</string>
+    
     <string name="app_name">Alarme Falante</string>
     <string name="action_settings">Settings</string>
     <string name="play">Tocar!</string>
-
+	
 </resources>

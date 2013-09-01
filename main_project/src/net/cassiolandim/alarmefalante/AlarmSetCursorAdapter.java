@@ -1,6 +1,10 @@
 package net.cassiolandim.alarmefalante;
 
 import java.text.NumberFormat;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.flurry.android.FlurryAgent;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,7 +25,7 @@ public class AlarmSetCursorAdapter extends CursorAdapter {
 	private MyDatabase db;
 
 	public AlarmSetCursorAdapter(Context context, Cursor cursor, MyDatabase db) {
-		super(context, cursor, FLAG_REGISTER_CONTENT_OBSERVER);
+		super(context, cursor, true);
 		this.lf = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.nf = NumberFormat.getInstance();
 		nf.setMinimumIntegerDigits(2);
@@ -53,6 +57,10 @@ public class AlarmSetCursorAdapter extends CursorAdapter {
 				service.putExtra("id", alarmSet.id);
 				service.setAction(isChecked ? AlarmSetterService.CREATE : AlarmSetterService.CANCEL);
 				context.startService(service);
+				
+				Map<String, String> eventParams = new HashMap<String, String>();
+				eventParams.put("Action", isChecked ? "Enable" : "Disable");
+				FlurryAgent.logEvent("AlarmList", eventParams);
 			}
 		});
 		

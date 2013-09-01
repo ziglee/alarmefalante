@@ -2,6 +2,7 @@ package net.cassiolandim.alarmefalante;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -24,6 +25,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.flurry.android.FlurryAgent;
+
 public class DetailsActivity extends FragmentActivity {
 
 	private MyDatabase db;
@@ -43,6 +46,7 @@ public class DetailsActivity extends FragmentActivity {
 	private ToggleButton sabado;
 	private AlarmSet alarmSet;
 	private SnoozeTimePickerDialogFragment snoozeTimePickerDialog;
+	private String flurryKey;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,8 @@ public class DetailsActivity extends FragmentActivity {
 		setContentView(R.layout.details_activity_main);
 		setResult(RESULT_CANCELED);
 
+		this.flurryKey = getString(R.string.flurry_key);
+		
 		MyApplication app = (MyApplication) getApplication();
 		this.db = app.getDb();
 		this.snoozeTimePickerDialog = new SnoozeTimePickerDialogFragment();
@@ -108,6 +114,10 @@ public class DetailsActivity extends FragmentActivity {
 		cancelButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Map<String, String> eventParams = new HashMap<String, String>();
+				eventParams.put("Action", "Cancel");
+				FlurryAgent.logEvent("AlarmDetails", eventParams);
+				
 				setResult(RESULT_CANCELED);
 				finish();
 			}
@@ -139,6 +149,18 @@ public class DetailsActivity extends FragmentActivity {
 			}
 		});
 	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		FlurryAgent.onStartSession(this, flurryKey);
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		FlurryAgent.onEndSession(this);
+	}
 
 	private void saveSettings() {
 		StringBuilder weekDays = new StringBuilder();
@@ -165,10 +187,20 @@ public class DetailsActivity extends FragmentActivity {
 		alarmSet.vibration = vibrationCheck.isChecked();
 		alarmSet.weekdays = weekDays.toString();
 
-		if (alarmSet.id == null)
+		Map<String, String> eventParams = new HashMap<String, String>();
+		
+		if (alarmSet.id == null) {
 			db.insert(alarmSet);
-		else
+			eventParams.put("Action", "Insert");
+		} else {
 			db.update(alarmSet);
+			eventParams.put("Action", "Update");
+		}
+		
+		eventParams.put("Hour", alarmSet.hour.toString());
+		eventParams.put("Minute", alarmSet.minute.toString());
+        
+		FlurryAgent.logEvent("AlarmDetails", eventParams);
 
 		Intent service = new Intent(DetailsActivity.this, AlarmSetterService.class);
 		service.putExtra("id", alarmSet.id);
@@ -178,6 +210,7 @@ public class DetailsActivity extends FragmentActivity {
 		Toast.makeText(this, "O alarme est‡ programado.", Toast.LENGTH_SHORT).show();
 	}
 
+	@SuppressLint("ValidFragment")
 	private class SnoozeTimePickerDialogFragment extends DialogFragment {
 		@SuppressLint("UseSparseArrays")
 		@Override

@@ -43,7 +43,9 @@ public class AlarmSetterService extends IntentService {
 				Cursor cursor = db.query();
 				if (cursor != null) {
 					do {
-						createAlarm(am, MyDatabase.populateModel(cursor));
+						alarmSet = MyDatabase.populateModel(cursor);
+						if (alarmSet.enabled)
+							createAlarm(am, alarmSet);
 					} while (cursor.moveToNext());
 				}
 			} else {

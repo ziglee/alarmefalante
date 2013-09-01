@@ -1,5 +1,8 @@
 package net.cassiolandim.alarmefalante;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -13,6 +16,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 
+import com.flurry.android.FlurryAgent;
+
 public class MainListActivity extends ActionBarActivity {
 
 	private MyDatabase db;
@@ -21,11 +26,14 @@ public class MainListActivity extends ActionBarActivity {
 	private ActionMode mActionMode;
 	private Long idSelected;
 	private View viewSelected;
+	private String flurryKey;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list_activity_main);
+		
+		this.flurryKey = getString(R.string.flurry_key);
 
 		MyApplication app = (MyApplication) getApplication();
 		this.db = app.getDb();
@@ -42,7 +50,7 @@ public class MainListActivity extends ActionBarActivity {
 				startActivityForResult(intent, 0);
 			}
 		});
-		
+
 		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -57,7 +65,7 @@ public class MainListActivity extends ActionBarActivity {
 			}
 		});
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -75,10 +83,25 @@ public class MainListActivity extends ActionBarActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.menu_add) {
+			Map<String, String> eventParams = new HashMap<String, String>();
+			eventParams.put("Action", "Create");
+			FlurryAgent.logEvent("AlarmList", eventParams);
 			startActivity(new Intent(MainListActivity.this, DetailsActivity.class));
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		FlurryAgent.onStartSession(this, flurryKey);
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		FlurryAgent.onEndSession(this);
 	}
 
 	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
@@ -87,12 +110,23 @@ public class MainListActivity extends ActionBarActivity {
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 			switch (item.getItemId()) {
 			case R.id.menu_remove:
+				Intent service = new Intent(MainListActivity.this, AlarmSetterService.class);
+				service.putExtra("id", idSelected);
+				service.setAction(AlarmSetterService.CANCEL);
+				startService(service);
+				
 				db.remove(idSelected);
+				
 				mode.finish();
+				
 				viewSelected = null;
 				idSelected = null;
+				
 				adapter = new AlarmSetCursorAdapter(MainListActivity.this, db.query(), db);
 				listView.setAdapter(adapter);
+				
+				FlurryAgent.logEvent("Alarm_Removed");
+				
 				return true;
 			default:
 				return false;

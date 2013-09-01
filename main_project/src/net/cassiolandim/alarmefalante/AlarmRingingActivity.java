@@ -5,7 +5,10 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.flurry.android.FlurryAgent;
+
 import net.cassiolandim.alarmefalante.AlarmRingingService.LocalBinder;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -25,6 +28,7 @@ public class AlarmRingingActivity extends Activity {
 
 	public static final String EXTRA_ID = "id";
 	
+	@SuppressLint("SimpleDateFormat")
 	private static final SimpleDateFormat SDF = new SimpleDateFormat("HH:mm");
 	
 	private AlarmRingingService alarmRingingService;
@@ -34,6 +38,7 @@ public class AlarmRingingActivity extends Activity {
 	private Button snoozeButton;
 	private Timer timer;
 	private long startedAt = 0;
+	private String flurryKey;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,8 @@ public class AlarmRingingActivity extends Activity {
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON); 
 		setContentView(R.layout.activity_alarm_ringing);
 
+		this.flurryKey = getString(R.string.flurry_key);
+		
 		setVolumeControlStream(AudioManager.STREAM_ALARM);
 		
 		this.startedAt = SystemClock.elapsedRealtime();
@@ -72,10 +79,11 @@ public class AlarmRingingActivity extends Activity {
 		
 		scheduleTimer();
 	}
-
+	
 	@Override
 	protected void onStart() {
 		super.onStart();
+		FlurryAgent.onStartSession(this, flurryKey);
 		Intent intent = new Intent(this, AlarmRingingService.class);
 		bindService(intent, connection, Context.BIND_AUTO_CREATE);
 	}
@@ -87,6 +95,7 @@ public class AlarmRingingActivity extends Activity {
 			unbindService(connection);
 			bound = false;
 		}
+		FlurryAgent.onEndSession(this);
 	}
 	
 	@Override
