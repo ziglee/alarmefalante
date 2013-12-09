@@ -159,7 +159,7 @@ public final class MyDatabase {
 
 	private final static class DbOpenHelper extends SQLiteOpenHelper {
 
-		private static final String DATABASE_NAME = "PlayKidsTVDatabase";
+		private static final String DATABASE_NAME = "AlarmeFalanteDatabase";
 		private static final int DATABASE_VERSION = 1;
 
 		private static DbOpenHelper instance;
